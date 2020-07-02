@@ -1,23 +1,24 @@
 ﻿using IFTTT.Interfaces;
 using IFTTT.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IFTTT.Processors
 {
-    public class IFTTTExpressionTriggerProcessor
+    public class ExpressionTriggerProcessor
     {
-        private readonly IIFTTTExpressionProcessor expressionProcessor;
+        private readonly IExpressionProcessor expressionProcessor;
 
-        public IFTTTExpressionTriggerProcessor(IIFTTTExpressionProcessor expressionProcessor)
+        public ExpressionTriggerProcessor(IExpressionProcessor expressionProcessor)
         {
             this.expressionProcessor = expressionProcessor;
             this.expressionProcessor.ExpressionGroupPassed += ExpressionProcessor_ExpressionGroupPassed;
         }
 
-        public IEnumerable<IFTTTTrigger> Triggers { get; set; }
-        public IEnumerable<IFTTTExpressionGroup> ExpressionGroups { get; set; }
+        public IEnumerable<Trigger> Triggers { get; set; }
+        public IEnumerable<ExpressionGroup> ExpressionGroups { get; set; }
 
-        private void ExpressionProcessor_ExpressionGroupPassed(object sender, IFTTTExpressionGroup e)
+        private void ExpressionProcessor_ExpressionGroupPassed(object sender, ExpressionGroup e)
         {
             var trigger = Triggers.FirstOrDefault(x => x.ListForGroupName == e.Name);
             if (trigger != null)

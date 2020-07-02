@@ -1,6 +1,6 @@
 ﻿namespace IFTTT.Models
 {
-    public class IFTTTTypeExpression<T> : IFTTTExpression
+    public class TypeExpression<T> : Expression
     {
         public new T ExpressionA
         {

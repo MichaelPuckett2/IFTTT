@@ -2,7 +2,7 @@
 
 namespace IFTTT.Models
 {
-    public class IFTTTExpression
+    public class Expression
     {
         public object ExpressionA { get; set; }
         public EqualityOperator EqualityOperator { get; set; }

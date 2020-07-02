@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 
 namespace IFTTT.Tests
 {
-    public class TraceExpressionLogger : IFTTTLogger
+    public class TraceExpressionLogger : IExpressionLogger
     {
         private const string NullString = "Null";
 
-        public Task LogAsync(IFTTTExpression expression, bool expressionResult) => Task.Run(() =>
+        public Task LogAsync(Expression expression, bool expressionResult) => Task.Run(() =>
         {
             Trace.WriteLine($"Expression:\t\t\t\t{expression.ExpressionA ?? NullString} {expression.EqualityOperator} {expression.ExpressionB ?? NullString} = {expressionResult}");
         });
 
-        public Task LogAsync(IFTTTExpressionGroup group, bool expressionResult) => Task.Run(() =>
+        public Task LogAsync(ExpressionGroup group, bool expressionResult) => Task.Run(() =>
         {
             Trace.WriteLine($"Expression Group:\t\t{group.Name} = {expressionResult}");
         });

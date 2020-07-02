@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace IFTTT.Processors
 {
-    public class IFTTTExpressionProcessor : IIFTTTExpressionProcessor
+    public class ExpressionProcessor : IExpressionProcessor
     {
         private const int MaxDegreesOfParallism = 8;
-        private readonly IFTTTLogger expressionLogger;
-        public event EventHandler<IFTTTExpressionGroup> ExpressionGroupPassed;
+        private readonly IExpressionLogger expressionLogger;
+        public event EventHandler<ExpressionGroup> ExpressionGroupPassed;
 
-        public IFTTTExpressionProcessor(IFTTTLogger expressionLogger = null)
+        public ExpressionProcessor(IExpressionLogger expressionLogger = null)
         {
             this.expressionLogger = expressionLogger;
         }
 
-        public bool ProcessExpressionGroup(IFTTTExpressionGroup expressionGroup)
+        public bool ProcessExpressionGroup(ExpressionGroup expressionGroup)
         {
             bool boolean = ProcessExpressions(expressionGroup.Expressions, expressionGroup.IsShorted, expressionGroup.Circuit);
             if (expressionGroup.IsShorted && !boolean) return boolean;
@@ -41,7 +41,7 @@ namespace IFTTT.Processors
             return boolean;
         }
 
-        public bool ProcessExpressions(IEnumerable<IFTTTExpression> expressions, bool isShorted, Circuit circuit)
+        public bool ProcessExpressions(IEnumerable<Expression> expressions, bool isShorted, Circuit circuit)
         {
             var boolean = true; //Always assume true to start.
             if (!(expressions?.Any() ?? false)) return boolean;
@@ -68,7 +68,7 @@ namespace IFTTT.Processors
             return boolean;
         }
 
-        public bool ProcessExpression(IFTTTExpression expression)
+        public bool ProcessExpression(Expression expression)
         {
             bool result;
             switch (expression.EqualityOperator)
@@ -86,7 +86,7 @@ namespace IFTTT.Processors
             return result;
         }
 
-        private bool ProcessLogicalParallel(IFTTTExpressionGroup expressionGroup, bool boolean)
+        private bool ProcessLogicalParallel(ExpressionGroup expressionGroup, bool boolean)
         {
             switch (expressionGroup.LogicalOperator)
             {
@@ -102,7 +102,7 @@ namespace IFTTT.Processors
             return boolean;
         }
 
-        private bool ProcessLogicalSeries(IFTTTExpressionGroup expressionGroup, bool boolean)
+        private bool ProcessLogicalSeries(ExpressionGroup expressionGroup, bool boolean)
         {
             switch (expressionGroup.LogicalOperator)
             {
@@ -118,9 +118,9 @@ namespace IFTTT.Processors
             return boolean;
         }
 
-        private bool ProcessExpressionGroupInSeries(IFTTTExpressionGroup expressionGroup, bool boolean)
+        private bool ProcessExpressionGroupInSeries(ExpressionGroup expressionGroup, bool boolean)
         {
-            foreach (var group in expressionGroup.ExpressionGroups ?? Enumerable.Empty<IFTTTExpressionGroup>())
+            foreach (var group in expressionGroup.ExpressionGroups ?? Enumerable.Empty<ExpressionGroup>())
             {
                 boolean = ProcessExpressionGroup(group) && boolean;
                 if (expressionGroup.IsShorted && !boolean) break;
@@ -129,7 +129,7 @@ namespace IFTTT.Processors
             return boolean;
         }
 
-        private bool ProcessExpressionGroupInParallel(IFTTTExpressionGroup expressionGroup, bool boolean)
+        private bool ProcessExpressionGroupInParallel(ExpressionGroup expressionGroup, bool boolean)
         {
             if (!(expressionGroup.ExpressionGroups?.Any() ?? false)) return boolean;
 

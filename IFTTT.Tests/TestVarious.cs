@@ -13,7 +13,7 @@ namespace IFTTT.Tests
         private const string LogicalPassingOrFailingGroup = "Logical Passing OR Failing Test Group";
         private const string FailingGroup = "Failing Test Group";
 
-        static IFTTTExpressionGroup GetExpressionGroupA()
+        static ExpressionGroup GetExpressionGroupA()
         {
             var person = new Person
             {
@@ -22,12 +22,12 @@ namespace IFTTT.Tests
                 Age = 40
             };
 
-            var expression1 = new IFTTTPropertyExpression<string>(person, nameof(person.FirstName), EqualityOperator.NotEquals, "Doe");
-            var expression2 = new IFTTTPropertyExpression<string>(person, nameof(person.LastName), EqualityOperator.NotEquals, null);
-            var expression3 = new IFTTTPropertyExpression<int>(person, nameof(person.Age), EqualityOperator.Equals, 40);
-            var allExpressions = new List<IFTTTExpression> { expression1, expression2, expression3 };
+            var expression1 = new PropertyExpression<string>(person, nameof(person.FirstName), EqualityOperator.NotEquals, "Doe");
+            var expression2 = new PropertyExpression<string>(person, nameof(person.LastName), EqualityOperator.NotEquals, null);
+            var expression3 = new PropertyExpression<int>(person, nameof(person.Age), EqualityOperator.Equals, 40);
+            var allExpressions = new List<Expression> { expression1, expression2, expression3 };
 
-            var expressionGroup = new IFTTTExpressionGroup
+            var expressionGroup = new ExpressionGroup
             {
                 Name = PassingGroup,
                 Circuit = Circuit.Series,
@@ -37,7 +37,7 @@ namespace IFTTT.Tests
 
             return expressionGroup;
         }
-        static IFTTTExpressionGroup GetExpressionGroupB()
+        static ExpressionGroup GetExpressionGroupB()
         {
             var person = new Person
             {
@@ -46,12 +46,12 @@ namespace IFTTT.Tests
                 Age = 40
             };
 
-            var expression1 = new IFTTTPropertyExpression<string>(person, nameof(person.FirstName), EqualityOperator.NotEquals, "John");
-            var expression2 = new IFTTTPropertyExpression<string>(person, nameof(person.LastName), EqualityOperator.NotEquals, null);
-            var expression3 = new IFTTTPropertyExpression<int>(person, nameof(person.Age), EqualityOperator.Equals, 40);
-            var allExpressions = new List<IFTTTExpression> { expression1, expression2, expression3 };
+            var expression1 = new PropertyExpression<string>(person, nameof(person.FirstName), EqualityOperator.NotEquals, "John");
+            var expression2 = new PropertyExpression<string>(person, nameof(person.LastName), EqualityOperator.NotEquals, null);
+            var expression3 = new PropertyExpression<int>(person, nameof(person.Age), EqualityOperator.Equals, 40);
+            var allExpressions = new List<Expression> { expression1, expression2, expression3 };
 
-            var expressionGroup = new IFTTTExpressionGroup
+            var expressionGroup = new ExpressionGroup
             {
                 Name = FailingGroup,
                 Circuit = Circuit.Series,
@@ -70,15 +70,15 @@ namespace IFTTT.Tests
             //Arrange
             var expressionGroupA = GetExpressionGroupA(); //Meant to pass
             var expressionGroupB = GetExpressionGroupB(); //Meant to fail
-            var allGroups = new IFTTTExpressionGroup
+            var allGroups = new ExpressionGroup
             {
                 Name = LogicalPassingOrFailingGroup,
-                ExpressionGroups = new List<IFTTTExpressionGroup> { expressionGroupA, expressionGroupB },
+                ExpressionGroups = new List<ExpressionGroup> { expressionGroupA, expressionGroupB },
                 LogicalOperator = LogicalOperator.Or //Passes if one or the other.
             };
 
             var traceLogger = new TraceExpressionLogger();
-            var expressionProcessor = new IFTTTExpressionProcessor(traceLogger);
+            var expressionProcessor = new ExpressionProcessor(traceLogger);
 
             //Act
             var result = expressionProcessor.ProcessExpressionGroup(allGroups);
@@ -94,14 +94,14 @@ namespace IFTTT.Tests
 
             //Arrange
 
-            var triggers = new List<IFTTTTrigger>
+            var triggers = new List<Trigger>
             {
-                new IFTTTTrigger
+                new Trigger
                 {
                     ListForGroupName = PassingGroup,
                     TriggerGroupName = FailingGroup
                 },
-                new IFTTTTrigger
+                new Trigger
                 {
                     ListForGroupName = FailingGroup,
                     TriggerGroupName = LogicalPassingOrFailingGroup
@@ -112,11 +112,11 @@ namespace IFTTT.Tests
             var expressionGroupB = GetExpressionGroupB(); //Meant to fail
 
             var traceLogger = new TraceExpressionLogger();
-            var expressionProcessor = new IFTTTExpressionProcessor(traceLogger);
-            var actor = new IFTTTExpressionTriggerProcessor(expressionProcessor)
+            var expressionProcessor = new ExpressionProcessor(traceLogger);
+            var actor = new ExpressionTriggerProcessor(expressionProcessor)
             {
                 Triggers = triggers,
-                ExpressionGroups = new IFTTTExpressionGroup[] { expressionGroupA, expressionGroupB }
+                ExpressionGroups = new ExpressionGroup[] { expressionGroupA, expressionGroupB }
             };
 
             //Act

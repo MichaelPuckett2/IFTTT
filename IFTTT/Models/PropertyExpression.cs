@@ -5,11 +5,11 @@ using System.Reflection;
 
 namespace IFTTT.Models
 {
-    public class IFTTTPropertyExpression<T> : IFTTTTypeExpression<T>
+    public class PropertyExpression<T> : TypeExpression<T>
     {
         private static IEnumerable<PropertyInfo> propertyInfos;
 
-        public IFTTTPropertyExpression(object obj, string propertyName, EqualityOperator equalityOperator, T value)
+        public PropertyExpression(object obj, string propertyName, EqualityOperator equalityOperator, T value)
         {
             Owner = obj;
             PropertyName = propertyName;
