@@ -1,16 +1,18 @@
 ﻿using IFTTT.Constants;
 using IFTTT.Interfaces;
 using IFTTT.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace IFTTT.Processors
 {
-    public class IFTTTExpressionProcessor
+    public class IFTTTExpressionProcessor : IIFTTTExpressionProcessor
     {
         private const int MaxDegreesOfParallism = 8;
         private readonly IFTTTLogger expressionLogger;
+        public event EventHandler<IFTTTExpressionGroup> ExpressionGroupPassed;
 
         public IFTTTExpressionProcessor(IFTTTLogger expressionLogger = null)
         {
@@ -35,6 +37,7 @@ namespace IFTTT.Processors
             }
 
             expressionLogger?.LogAsync(expressionGroup, boolean);
+            if (boolean) ExpressionGroupPassed?.Invoke(this, expressionGroup);
             return boolean;
         }
 
