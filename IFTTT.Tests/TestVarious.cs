@@ -7,10 +7,10 @@ using System.Collections.Generic;
 namespace IFTTT.Tests
 {
     [TestClass]
-    public class UnitTest1
+    public class TestVarious
     {
         [TestMethod]
-        public void TestMethod1()
+        public void JustTestingVarious()
         {
             //Arrange
             IFTTTExpressionGroup expressionGroupA = ArrangeGroupA(); //Meant to pass
