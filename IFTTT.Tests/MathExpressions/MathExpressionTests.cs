@@ -1,4 +1,5 @@
 ﻿using IFTTT.Enums;
+using IFTTT.Expressions;
 using IFTTT.Expressions.MathExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -25,7 +26,7 @@ namespace IFTTT.Tests.MathExpressions
             var result = actor.Result();
 
             //Assert
-            Assert.IsTrue(result == 20);
+            Assert.AreEqual(result, 20);
         }
 
         [TestMethod]
@@ -50,7 +51,7 @@ namespace IFTTT.Tests.MathExpressions
             var result = actor.Result();
 
             //Assert
-            Assert.IsTrue(result == 10);
+            Assert.AreEqual(result, 10);
         }
 
         [TestMethod]
@@ -82,7 +83,7 @@ namespace IFTTT.Tests.MathExpressions
             var result = actor.Result();
 
             //Assert
-            Assert.IsTrue(result == 0);
+            Assert.AreEqual(result, 0);
         }
 
         [TestMethod]
@@ -100,7 +101,7 @@ namespace IFTTT.Tests.MathExpressions
             var result = actor.Result();
 
             //Assert
-            Assert.IsTrue(result == 21);
+            Assert.AreEqual(result, 21);
         }
 
         [TestMethod]
@@ -125,7 +126,7 @@ namespace IFTTT.Tests.MathExpressions
             var result = actor.Result();
 
             //Assert
-            Assert.IsTrue(result == 10.5);
+            Assert.AreEqual(result, 10.5);
         }
 
         [TestMethod]
@@ -157,7 +158,7 @@ namespace IFTTT.Tests.MathExpressions
             var result = actor.Result();
 
             //Assert
-            Assert.IsTrue(result == 0);
+            Assert.AreEqual(result, 0);
         }
 
         [TestMethod]
@@ -189,7 +190,7 @@ namespace IFTTT.Tests.MathExpressions
             var result = actor.Result();
 
             //Assert
-            Assert.IsTrue(result == "Mr. Michael Brian Puckett");
+            Assert.AreEqual(result, "Mr. Michael Brian Puckett");
         }
 
         [TestMethod]
@@ -237,7 +238,7 @@ namespace IFTTT.Tests.MathExpressions
             var result = actor.Result();
 
             //Assert
-            Assert.IsTrue(result == TimeSpan.FromHours(2));
+            Assert.AreEqual(result, TimeSpan.FromHours(2));
         }
 
         [TestMethod]
@@ -254,6 +255,39 @@ namespace IFTTT.Tests.MathExpressions
             //Act
             //Assert
             Assert.ThrowsException<ArithmeticException>(() => actor.Result());
+        }
+
+        [TestMethod]
+        public void TestCustomExpression()
+        {
+            //Arrange
+            var actor = new TestWeirdExpression
+            {
+                A = true,
+                B = false,
+                Operator = ConditionalOperator.And
+            };
+
+            //Act
+            var result = actor.Result();
+
+            //Assert
+            Assert.AreEqual(result, "One is Not True");
+        }
+
+        internal class TestWeirdExpression : IExpression<bool, ConditionalOperator, bool>, IExpressionResult<string>
+        {
+            public bool A { get; set; }
+            public bool B { get; set; }
+            public ConditionalOperator Operator { get; set; }
+            public string Result()
+            {
+                return Operator switch
+                {
+                    ConditionalOperator.And => A && B ? "Both True" : "One is Not True",
+                    _ => A || B ? "One or Both are True" : "Neither is True",
+                };
+            }
         }
     }
 }

@@ -7,72 +7,47 @@ namespace IFTTT.Expressions.MathExpressions
     {
         public static int Result(int A, MathOperator mathOperator, int B)
         {
-            switch (mathOperator)
+            return mathOperator switch
             {
-                case MathOperator.Multiply:
-                    return A * B;
-                case MathOperator.Divide:
-                    return A / B;
-                case MathOperator.Mod:
-                    return A % B;
-                case MathOperator.Add:
-                    return A + B;
-                case MathOperator.Substract:
-                    return A - B;
-                default:
-                    throw new ArithmeticException($"No possible way to {mathOperator} {nameof(IntegerMathExpression)}");
-            }
+                MathOperator.Multiply => A * B,
+                MathOperator.Divide => A / B,
+                MathOperator.Mod => A % B,
+                MathOperator.Add => A + B,
+                MathOperator.Substract => A - B,
+                _ => throw new ArithmeticException($"No possible way to {mathOperator} {nameof(IntegerMathExpression)}"),
+            };
         }
 
         public static double Result(double A, MathOperator mathOperator, double B)
         {
-            switch (mathOperator)
+            return mathOperator switch
             {
-                case MathOperator.Multiply:
-                    return A * B;
-                case MathOperator.Divide:
-                    if (B == 0) return double.NaN;
-                    return A / B;
-                case MathOperator.Mod:
-                    return A % B;
-                case MathOperator.Add:
-                    return A + B;
-                case MathOperator.Substract:
-                    return A - B;
-                default:
-                    throw new ArithmeticException($"No possible way to {mathOperator} {nameof(DoubleMathExpression)}");
-            }
+                MathOperator.Multiply => A * B,
+                MathOperator.Divide => A / B,
+                MathOperator.Mod => A % B,
+                MathOperator.Add => A + B,
+                MathOperator.Substract => A - B,
+                _ => throw new ArithmeticException($"No possible way to {mathOperator} {nameof(DoubleMathExpression)}"),
+            };
         }
 
         public static string Result(string A, MathOperator mathOperator, string B)
         {
-            switch (mathOperator)
+            return mathOperator switch
             {
-                case MathOperator.Add:
-                    return A + B;
-                case MathOperator.Multiply:
-                case MathOperator.Divide:
-                case MathOperator.Mod:
-                case MathOperator.Substract:
-                default:
-                    throw new ArithmeticException($"No possible way to {mathOperator} {nameof(StringMathExpression)}");
-            }
+                MathOperator.Add => A + B,
+                _ => throw new ArithmeticException($"No possible way to {mathOperator} {nameof(StringMathExpression)}"),
+            };
         }
 
         public static TimeSpan Result(TimeSpan A, MathOperator mathOperator, TimeSpan B)
         {
-            switch (mathOperator)
+            return mathOperator switch
             {
-                case MathOperator.Add:
-                    return A + B;
-                case MathOperator.Substract:
-                    return A - B;
-                case MathOperator.Multiply:
-                case MathOperator.Divide:
-                case MathOperator.Mod:
-                default:
-                    throw new ArithmeticException($"No possible way to {mathOperator} {nameof(TimeSpanMathExpression)}");
-            }
+                MathOperator.Add => A + B,
+                MathOperator.Substract => A - B,
+                _ => throw new ArithmeticException($"No possible way to {mathOperator} {nameof(TimeSpanMathExpression)}"),
+            };
         }
     }
 }
