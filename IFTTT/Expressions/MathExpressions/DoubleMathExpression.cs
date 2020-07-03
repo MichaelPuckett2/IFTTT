@@ -2,7 +2,7 @@
 
 namespace IFTTT.Expressions.MathExpressions
 {
-    public class DoubleExpression : IDoubleExpression
+    public class DoubleMathExpression : IDoubleExpression
     {
         public double A { get; set; }
         public double B { get; set; }
